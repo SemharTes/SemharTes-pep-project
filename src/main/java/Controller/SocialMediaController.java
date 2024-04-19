@@ -6,12 +6,11 @@ import Model.Message;
 import Service.AccountService;
 import Service.MessageService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-// import com.fasterxml.jackson.core.JsonProcessingException;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
-
 import java.util.List;
+
 
 
 public class SocialMediaController {
@@ -49,6 +48,7 @@ public class SocialMediaController {
    }
 
 
+
    private void registerAccountHandler(Context ctx) {
        try {
            Account account = objectMapper.readValue(ctx.body(), Account.class);
@@ -65,9 +65,8 @@ public class SocialMediaController {
    
    private void loginHandler(Context ctx) {
        try {
-           String username = ctx.formParam("username");
-           String password = ctx.formParam("password");
-           Account loggedInAccount = accountService.login(username, password);
+            Account account = ctx.bodyAsClass(Account.class);
+            Account loggedInAccount = accountService.login(account.getUsername(), account.getPassword());
            if (loggedInAccount != null) {
                ctx.json(loggedInAccount);
                ctx.status(200);
